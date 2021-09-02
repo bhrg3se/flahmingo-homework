@@ -2,22 +2,25 @@
 
 ## Setup and running
 
-### Setup Google Cloud PubSub
+### 1. Setup Google Cloud PubSub
 - Create a project in google cloud.  
 - Create a topic in PubSub named "verification".  
 - Create a service account which has permission of publishing and subscribing pub sub.
-- Download the Google Cloud key file for that account.
+- Download the key file for that account.
    
-### Setup Auth-Service
+### 2. Setup Twilio Account
+Sign up for twilio and get account SID, auth token and phone number
+### 3. Setup Microservices
 
-#### Using `docker-compose`
+#### 3.1 Using `docker-compose`
 
-- Go to docker/ directory
+- Go to setup/ directory
+- Edit the config file, fill up googleCloud and twillio fields
 - Copy the google cloud key file as setup/key.json
   > You can change the directory by changing the volume source in docker-compose.yml file.
 - Run `docker-compose up`
 
-#### Installing natively
+#### 3.2 Installing natively
 
 - Make sure you have go:1.15+ installed
 - Create a config file in /etc/flahmingo/config.toml
