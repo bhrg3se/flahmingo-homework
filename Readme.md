@@ -16,7 +16,7 @@ Sign up for twilio and get account SID, auth token and phone number
 
 - Go to setup/ directory
 - Edit the config file, fill up googleCloud and twillio fields
-- Copy the google cloud key file as setup/key.json
+- Copy the google cloud key file to setup/key.json
   > You can change the directory by changing the volume source in docker-compose.yml file.
 - Run `docker-compose up`
 
@@ -25,7 +25,7 @@ Sign up for twilio and get account SID, auth token and phone number
 - Make sure you have go:1.15+ installed
 - Create a config file in /etc/flahmingo/config.toml
 - Use setup/config.toml as a starting point
-- Copy the google cloud key file as /etc/flahmingo/key.json
+- Copy the google cloud key file to /etc/flahmingo/key.json
 - Start a postgres database and configure the host,name,user and password in /etc/flahmingo/config.toml
 - Run setup/init.sql in postgres
 - Go to services/auth. Run `go build && ./auth`
