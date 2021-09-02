@@ -37,22 +37,22 @@ Sign up for twilio and get account SID, auth token and phone number
 
 ## File Structure
 
-- utils (utility functions)
-- setup (docker-compose, config samples and initial sql file)
-- services
-  - auth
-    - proto (protobuf definitions)
-    - pb (protobuf generated files)
-    - server (gRPC server and APIS)
-      - apis.go (gRPC API handlers)
-      - jwt.go (auth token generation and verification)
-      - server.go 
-    - store (database and other dependencies)
-      - init.go (initialization of database and other dependencies)
-      - db.go (database functions)
-      - pubsub.go (pubsub functions)
-      - mock.go (mock store for testing)
-  - otp
+- `utils/` (utility functions)
+- `setup/` (docker-compose, config samples and initial sql file)
+- `services/`
+  - `auth/`
+    - `proto/` (protobuf definitions)
+    - `pb/` (protobuf generated files)
+    - `server/` (gRPC server and APIS)
+      - `apis.go` (gRPC API handlers)
+      - `jwt.go` (auth token generation and verification)
+      - `server.go` 
+    - `store/` (database and other dependencies)
+      - `init.go` (initialization of database and other dependencies)
+      - `db.go` (database functions)
+      - `pubsub.go` (pubsub functions)
+      - `mock.go` (mock store for testing)
+  - `otp/`
 
 
    
