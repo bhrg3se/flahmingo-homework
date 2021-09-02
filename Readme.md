@@ -44,11 +44,11 @@ Sign up for twilio and get account SID, auth token and phone number
     - proto (protobuf definitions)
     - pb (protobuf generated files)
     - server (gRPC server and APIS)
-      - apis.go
+      - apis.go (gRPC API handlers)
       - jwt.go (auth token generation and verification)
       - server.go 
     - store (database and other dependencies)
-      - init.gi (initialization of database and other dependencies)
+      - init.go (initialization of database and other dependencies)
       - db.go (database functions)
       - pubsub.go (pubsub functions)
       - mock.go (mock store for testing)
