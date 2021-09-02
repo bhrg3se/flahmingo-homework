@@ -15,7 +15,7 @@ service AuthService {
   rpc LoginWithPhoneNumber (User) returns (google.protobuf.Empty) {}
   rpc ValidatePhoneNumberLogin (VerifyPhoneNumberRequest) returns (Token) {}
 
-  rpc GetProfile (Token) returns (User) {}
+  rpc GetProfile (google.protobuf.Empty) returns (User) {}
 }
 
 message User {

@@ -28,16 +28,6 @@ func startService(config utils.Config) {
 
 	sub := psClient.Subscription("verification-sub")
 
-	////Create subscription
-	//sub, err := psClient.CreateSubscription(
-	//	context.Background(),
-	//	"otp",
-	//	pubsub.SubscriptionConfig{Topic:psClient.Topic("verification")})
-	//
-	//if err != nil {
-	//	logrus.Fatalf("failed to create subscription: %v",err)
-	//}
-
 	logrus.Info("waiting for PubSub messages")
 	// handle received message
 	err = sub.Receive(context.Background(), func(ctx context.Context, message *pubsub.Message) {

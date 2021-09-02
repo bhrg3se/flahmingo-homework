@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"time"
@@ -107,8 +108,19 @@ func (s Server) ValidatePhoneNumberLogin(ctx context.Context, request *pb.Verify
 }
 
 // GetProfile return profile of user based on auth token if the given token is valid
-func (s Server) GetProfile(ctx context.Context, request *pb.Token) (*pb.User, error) {
-	token, err := parseAuthToken(request.Token, s.store.GetJWTPublicKey())
+func (s Server) GetProfile(ctx context.Context, e *emptypb.Empty) (*pb.User, error) {
+	// get auth token from metadata
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return nil, status.Error(codes.InvalidArgument, "could not find auth token")
+	}
+	authToken := md.Get("token")
+	if len(authToken) < 1 {
+		return nil, status.Error(codes.InvalidArgument, "could not find auth token")
+	}
+
+	// parse auth token to get phone number
+	token, err := parseAuthToken(authToken[0], s.store.GetJWTPublicKey())
 	if err != nil {
 		logrus.Error(err)
 		return nil, status.Error(codes.InvalidArgument, "could not parse auth token")

@@ -20,10 +20,12 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthServiceClient interface {
 	SignupWithPhoneNumber(ctx context.Context, in *User, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	//  takes otp entered by client and checks in database to verify it.
+	// If everything is good, user is marked as verified
 	VerifyPhoneNumber(ctx context.Context, in *VerifyPhoneNumberRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	LoginWithPhoneNumber(ctx context.Context, in *User, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	ValidatePhoneNumberLogin(ctx context.Context, in *VerifyPhoneNumberRequest, opts ...grpc.CallOption) (*Token, error)
-	GetProfile(ctx context.Context, in *Token, opts ...grpc.CallOption) (*User, error)
+	GetProfile(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*User, error)
 }
 
 type authServiceClient struct {
@@ -70,7 +72,7 @@ func (c *authServiceClient) ValidatePhoneNumberLogin(ctx context.Context, in *Ve
 	return out, nil
 }
 
-func (c *authServiceClient) GetProfile(ctx context.Context, in *Token, opts ...grpc.CallOption) (*User, error) {
+func (c *authServiceClient) GetProfile(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*User, error) {
 	out := new(User)
 	err := c.cc.Invoke(ctx, "/grpc.AuthService/GetProfile", in, out, opts...)
 	if err != nil {
@@ -84,10 +86,12 @@ func (c *authServiceClient) GetProfile(ctx context.Context, in *Token, opts ...g
 // for forward compatibility
 type AuthServiceServer interface {
 	SignupWithPhoneNumber(context.Context, *User) (*emptypb.Empty, error)
+	//  takes otp entered by client and checks in database to verify it.
+	// If everything is good, user is marked as verified
 	VerifyPhoneNumber(context.Context, *VerifyPhoneNumberRequest) (*emptypb.Empty, error)
 	LoginWithPhoneNumber(context.Context, *User) (*emptypb.Empty, error)
 	ValidatePhoneNumberLogin(context.Context, *VerifyPhoneNumberRequest) (*Token, error)
-	GetProfile(context.Context, *Token) (*User, error)
+	GetProfile(context.Context, *emptypb.Empty) (*User, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
@@ -107,7 +111,7 @@ func (UnimplementedAuthServiceServer) LoginWithPhoneNumber(context.Context, *Use
 func (UnimplementedAuthServiceServer) ValidatePhoneNumberLogin(context.Context, *VerifyPhoneNumberRequest) (*Token, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidatePhoneNumberLogin not implemented")
 }
-func (UnimplementedAuthServiceServer) GetProfile(context.Context, *Token) (*User, error) {
+func (UnimplementedAuthServiceServer) GetProfile(context.Context, *emptypb.Empty) (*User, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProfile not implemented")
 }
 func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
@@ -196,7 +200,7 @@ func _AuthService_ValidatePhoneNumberLogin_Handler(srv interface{}, ctx context.
 }
 
 func _AuthService_GetProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Token)
+	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -208,7 +212,7 @@ func _AuthService_GetProfile_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: "/grpc.AuthService/GetProfile",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).GetProfile(ctx, req.(*Token))
+		return srv.(AuthServiceServer).GetProfile(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
