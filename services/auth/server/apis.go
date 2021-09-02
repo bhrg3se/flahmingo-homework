@@ -42,7 +42,9 @@ func (s Server) SignupWithPhoneNumber(ctx context.Context, request *pb.User) (*e
 		logrus.Error(err)
 		return nil, status.Error(codes.Internal, "could not save otp")
 	}
-	s.store.SendOTP(ctx, otp, request.PhoneNumber)
+
+	// publish the otp on pubsub
+	s.store.PublishOTP(ctx, otp, request.PhoneNumber)
 	return empty, nil
 }
 
@@ -83,7 +85,9 @@ func (s Server) LoginWithPhoneNumber(ctx context.Context, request *pb.User) (*em
 		logrus.Error(err)
 		return nil, status.Error(codes.Internal, "could not save otp")
 	}
-	s.store.SendOTP(ctx, otp, request.PhoneNumber)
+
+	// publish the otp on pubsub
+	s.store.PublishOTP(ctx, otp, request.PhoneNumber)
 	return empty, nil
 }
 

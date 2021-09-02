@@ -22,7 +22,7 @@ type GenericStore interface {
 	GetConfig() utils.Config
 	CreateUser(user *User) error
 	GetUser(phoneNumber string) (*User, error)
-	SendOTP(ctx context.Context, otp, phoneNumber string)
+	PublishOTP(ctx context.Context, otp, phoneNumber string)
 	SaveOTP(otp, phoneNumber string) error
 	GetOTP(phoneNumber string) (string, error)
 	VerifyUser(phoneNumber string) error

@@ -5,8 +5,8 @@ import (
 	"context"
 )
 
-// SendOTP publishes a pubsub message with phone number and otp as attributes
-func (s Store) SendOTP(ctx context.Context, otp, phoneNumber string) {
+// PublishOTP publishes a pubsub message with phone number and otp as attributes
+func (s Store) PublishOTP(ctx context.Context, otp, phoneNumber string) {
 	msg := pubsub.Message{
 		Data: nil,
 		Attributes: map[string]string{

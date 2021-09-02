@@ -107,7 +107,7 @@ func TestServer_LoginWithPhoneNumber(t *testing.T) {
 	mockStore.On("GetUser", "").Return(nil, sql.ErrNoRows)
 
 	mockStore.On("GetUser", testutils.MockUser2.PhoneNumber).Return(&testutils.MockUser2, nil)
-	mockStore.On("SendOTP", context.Background(), mock.AnythingOfType("string"), testutils.MockUser2.PhoneNumber).Return(nil)
+	mockStore.On("PublishOTP", context.Background(), mock.AnythingOfType("string"), testutils.MockUser2.PhoneNumber).Return(nil)
 
 	type fields struct {
 		UnimplementedAuthServiceServer pb.UnimplementedAuthServiceServer
@@ -183,7 +183,7 @@ func TestServer_SignupWithPhoneNumber(t *testing.T) {
 	mockStore.On("SaveOTP", mock.AnythingOfType("string"), testutils.MockUser2.PhoneNumber).Return(nil)
 
 	mockStore.On("CreateUser", mock.Anything).Return(nil)
-	mockStore.On("SendOTP", context.Background(), mock.AnythingOfType("string"), testutils.MockUser2.PhoneNumber).Return(nil)
+	mockStore.On("PublishOTP", context.Background(), mock.AnythingOfType("string"), testutils.MockUser2.PhoneNumber).Return(nil)
 
 	type fields struct {
 		UnimplementedAuthServiceServer pb.UnimplementedAuthServiceServer

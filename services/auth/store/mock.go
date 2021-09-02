@@ -30,7 +30,7 @@ func (m *MockStore) GetUser(phoneNumber string) (*User, error) {
 	return r0.(*User), r1
 }
 
-func (m *MockStore) SendOTP(ctx context.Context, otp, phoneNumber string) {
+func (m *MockStore) PublishOTP(ctx context.Context, otp, phoneNumber string) {
 	m.Called(ctx, otp, phoneNumber)
 }
 
