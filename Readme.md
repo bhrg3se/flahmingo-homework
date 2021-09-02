@@ -29,7 +29,7 @@ Sign up for twilio and get account SID, auth token and phone number
 - Start a postgres database and configure the host,name,user and password in /etc/flahmingo/config.toml
 - Run setup/init.sql in postgres
 - Go to services/auth. Run `go build && ./auth`
-- Go to services/otp. Run `go build && ./auth`
+- Go to services/otp. Run `go build && ./otp`
 > You may run into permission issues because it will try to create private key file and log file.
 > You may just run the binary with sudo
 
