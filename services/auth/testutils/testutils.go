@@ -1,10 +1,12 @@
 package testutils
 
 import (
+	"context"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
 	"github.com/bhrg3se/flahmingo-homework/services/auth/store"
+	"google.golang.org/grpc/metadata"
 )
 
 const privateKey1 = `-----BEGIN RSA PRIVATE KEY-----
@@ -44,4 +46,13 @@ var MockUser2 = store.User{
 	Name:        "Some User 2",
 	IsVerified:  true,
 	PhoneNumber: "21234567890",
+}
+
+func GetContextWithAuthToken(token string) context.Context {
+	return metadata.NewIncomingContext(
+		context.Background(),
+		metadata.New(map[string]string{
+			"token": token,
+		}),
+	)
 }
