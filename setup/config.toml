@@ -1,7 +1,7 @@
 [database]
     host="db"
     user="flahmingo"
-    password=""
+    password="flahmingo"
     port="5432"
     name="flahmingo"
 [logging]
