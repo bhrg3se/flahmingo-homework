@@ -76,7 +76,7 @@ func (s Server) LoginWithPhoneNumber(ctx context.Context, request *pb.User) (*em
 	_, err := s.store.GetUser(request.PhoneNumber)
 	if err != nil {
 		logrus.Debug(err)
-		return empty, status.Error(codes.InvalidArgument, "phone number nor registered")
+		return empty, status.Error(codes.InvalidArgument, "phone number not registered")
 	}
 
 	otp := utils.GetRandomOTP()
