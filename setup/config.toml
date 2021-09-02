@@ -1,0 +1,18 @@
+[database]
+    host="db"
+    user="flahmingo"
+    password=""
+    port="5432"
+    name="flahmingo"
+[logging]
+    level="TRACE"
+[server]
+    listen="0.0.0.0:9090"
+
+[googleCloud]
+    projectID = ""
+
+[twilio]
+    accountSid  = ""
+    authToken = ""
+    phoneNumber = ""

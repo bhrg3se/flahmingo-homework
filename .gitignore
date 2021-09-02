@@ -1,0 +1,5 @@
+.idea/
+flahmingo-homework.iml
+services/auth/auth
+services/otp/otp
+setup/key.json

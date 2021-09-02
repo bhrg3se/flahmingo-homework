@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  auth:
+    build:
+      context: ../
+      dockerfile: services/auth/Dockerfile
+    environment:
+      SERVER.LISTEN: localhost:9090
+    volumes:
+      - type: bind
+        source: ${PWD}/key.json
+        target: /etc/flahmingo/key.json
+
+    ports:
+      - "9090:9090"
+    links:
+      - db
+    depends_on:
+      - db
+
+  otp:
+      build:
+        context: ../
+        dockerfile: services/otp/Dockerfile
+      volumes:
+        - type: bind
+          source: ${PWD}/key.json
+          target: /etc/flahmingo/key.json
+
+
+  db:
+    image: postgres:13.0
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_USER: flahmingo
+      POSTGRES_PASSWORD: flahmingo
+      POSTGRES_DB: flahmingo
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+

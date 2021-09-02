@@ -1,0 +1,39 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+
+option go_package = "login/pb";
+package grpc;
+
+
+service AuthService {
+  rpc SignupWithPhoneNumber (User) returns (google.protobuf.Empty) {}
+
+  //  takes otp entered by client and checks in database to verify it.
+  // If everything is good, user is marked as verified
+  rpc VerifyPhoneNumber (VerifyPhoneNumberRequest) returns (google.protobuf.Empty) {}
+
+  rpc LoginWithPhoneNumber (User) returns (google.protobuf.Empty) {}
+  rpc ValidatePhoneNumberLogin (VerifyPhoneNumberRequest) returns (Token) {}
+
+  rpc GetProfile (Token) returns (User) {}
+}
+
+message User {
+  string id = 1;
+  string name = 2;
+  string phoneNumber = 3;
+}
+
+message VerifyPhoneNumberRequest {
+  string otp = 1;
+  string phoneNumber = 2;
+}
+
+message Token {
+  string token = 1;
+}
+
+message GenericResponse {
+   bool success = 1;
+   string msg = 2;
+}
