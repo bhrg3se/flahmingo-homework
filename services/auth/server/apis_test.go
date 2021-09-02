@@ -7,6 +7,8 @@ import (
 	"github.com/bhrg3se/flahmingo-homework/services/auth/store"
 	"github.com/bhrg3se/flahmingo-homework/services/auth/testutils"
 	"github.com/stretchr/testify/mock"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"reflect"
 	"testing"
@@ -274,7 +276,7 @@ func TestServer_ValidatePhoneNumberLogin(t *testing.T) {
 		fields  fields
 		args    args
 		want    *pb.Token
-		wantErr bool
+		wantErr error
 	}{
 		{
 			name: "should fail when otp is empty",
@@ -290,7 +292,7 @@ func TestServer_ValidatePhoneNumberLogin(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: true,
+			wantErr: status.Error(codes.Unauthenticated, "invalid otp"),
 		},
 		{
 			name: "should fail when phone number is empty",
@@ -306,7 +308,7 @@ func TestServer_ValidatePhoneNumberLogin(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: true,
+			wantErr: status.Error(codes.Internal, "could not get otp"),
 		},
 		{
 			name: "should fail when otp is different",
@@ -322,7 +324,7 @@ func TestServer_ValidatePhoneNumberLogin(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: true,
+			wantErr: status.Error(codes.Unauthenticated, "invalid otp"),
 		},
 		{
 			name: "should pass",
@@ -337,7 +339,7 @@ func TestServer_ValidatePhoneNumberLogin(t *testing.T) {
 					Otp:         "123456",
 				},
 			},
-			wantErr: false,
+			wantErr: nil,
 		},
 
 		// TODO: Add test cases.
@@ -350,12 +352,8 @@ func TestServer_ValidatePhoneNumberLogin(t *testing.T) {
 			}
 			got, err := s.ValidatePhoneNumberLogin(tt.args.ctx, tt.args.request)
 
-			if tt.wantErr {
-				if (err != nil) != tt.wantErr {
-					t.Errorf("ValidatePhoneNumberLogin() error = %v, wantErr %v", err, tt.wantErr)
-					return
-				}
-				if !reflect.DeepEqual(got, tt.want) {
+			if err != nil {
+				if !reflect.DeepEqual(err, tt.wantErr) {
 					t.Errorf("ValidatePhoneNumberLogin() got = %v, want %v", got, tt.want)
 				}
 			} else {
@@ -390,7 +388,7 @@ func TestServer_VerifyPhoneNumber(t *testing.T) {
 		fields  fields
 		args    args
 		want    *emptypb.Empty
-		wantErr bool
+		wantErr error
 	}{
 
 		{
@@ -407,7 +405,7 @@ func TestServer_VerifyPhoneNumber(t *testing.T) {
 				},
 			},
 			want:    empty,
-			wantErr: true,
+			wantErr: status.Error(codes.Unauthenticated, "invalid otp"),
 		},
 		{
 			name: "should fail when phone number is empty",
@@ -423,7 +421,7 @@ func TestServer_VerifyPhoneNumber(t *testing.T) {
 				},
 			},
 			want:    empty,
-			wantErr: true,
+			wantErr: status.Error(codes.Internal, "could not get otp"),
 		},
 		{
 			name: "should fail when otp is different",
@@ -439,7 +437,7 @@ func TestServer_VerifyPhoneNumber(t *testing.T) {
 				},
 			},
 			want:    empty,
-			wantErr: true,
+			wantErr: status.Error(codes.Unauthenticated, "invalid otp"),
 		},
 		{
 			name: "should pass",
@@ -455,7 +453,7 @@ func TestServer_VerifyPhoneNumber(t *testing.T) {
 				},
 			},
 			want:    empty,
-			wantErr: false,
+			wantErr: nil,
 		},
 
 		// TODO: Add test cases.
@@ -467,7 +465,7 @@ func TestServer_VerifyPhoneNumber(t *testing.T) {
 				store:                          tt.fields.store,
 			}
 			got, err := s.VerifyPhoneNumber(tt.args.ctx, tt.args.request)
-			if (err != nil) != tt.wantErr {
+			if !reflect.DeepEqual(err, tt.wantErr) {
 				t.Errorf("VerifyPhoneNumber() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}

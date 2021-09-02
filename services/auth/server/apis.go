@@ -96,7 +96,7 @@ func (s Server) ValidatePhoneNumberLogin(ctx context.Context, request *pb.Verify
 	}
 
 	if request.Otp != otp {
-		return nil, status.Error(codes.InvalidArgument, "invalid otp")
+		return nil, status.Error(codes.Unauthenticated, "invalid otp")
 	}
 
 	token, err := generateAuthToken(request.PhoneNumber, s.store.GetJWTPrivateKey())
